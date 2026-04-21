@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bt_api_wazirx"
+version = "0.1.0"
+description = "WazirX exchange adapter for bt_api"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["bt_api_base"]
+
+[project.urls]
+Homepage = "https://github.com/cloudQuant/bt_api"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bt_api_wazirx"]
