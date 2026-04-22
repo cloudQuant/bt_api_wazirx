@@ -3,6 +3,7 @@ import urllib.parse
 from typing import Any
 
 from bt_api_base.feeds.capability import Capability
+
 from bt_api_wazirx.feeds.live_wazirx.request_base import WazirxRequestData
 from bt_api_wazirx.tickers import WazirxRequestTickerData
 
@@ -26,12 +27,12 @@ class WazirxRequestDataSpot(WazirxRequestData):
         self.exchange_name = kwargs.get("exchange_name", "WAZIRX___SPOT")
 
     def _get_tick(
-        self, symbol: str, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, Any], Any]:
         market = self._format_market(symbol)
         path = f"/api/v2/tickers/{market}"
         return self._request_prepare(
-            path, extra_data=extra_data, request_type="get_tick", symbol=symbol
+            path, extra_data=extra_data, request_type="get_tick", symbol=symbol,
         )
 
     @staticmethod
@@ -52,12 +53,12 @@ class WazirxRequestDataSpot(WazirxRequestData):
         )
 
     def _get_depth(
-        self, symbol: str, count: int = 20, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, count: int = 20, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, Any], Any]:
         market = self._format_market(symbol)
         path = f"/api/v2/depth/{market}?limit={count}"
         return self._request_prepare(
-            path, extra_data=extra_data, request_type="get_depth", symbol=symbol
+            path, extra_data=extra_data, request_type="get_depth", symbol=symbol,
         )
 
     @staticmethod
@@ -71,7 +72,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         return self.http_request(path, params=params, extra_data=extra_data)
 
     def async_get_depth(
-        self, symbol: str, count: int = 20, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, count: int = 20, extra_data: Any = None, **kwargs: Any,
     ) -> None:
         path, params, extra_data = self._get_depth(symbol, count, extra_data, **kwargs)
         self.submit(
@@ -92,7 +93,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         since = int(time.time()) - interval * 100
         path = f"/api/v2/klines/{market}?interval={interval}&startTime={since}"
         return self._request_prepare(
-            path, extra_data=extra_data, request_type="get_kline", symbol=symbol
+            path, extra_data=extra_data, request_type="get_kline", symbol=symbol,
         )
 
     @staticmethod
@@ -103,13 +104,13 @@ class WazirxRequestDataSpot(WazirxRequestData):
         return [klines], True
 
     def get_kline(
-        self, symbol: str, period: str, count: int = 20, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, period: str, count: int = 20, extra_data: Any = None, **kwargs: Any,
     ) -> Any:
         path, params, extra_data = self._get_kline(symbol, period, count, extra_data, **kwargs)
         return self.http_request(path, params=params, extra_data=extra_data)
 
     def async_get_kline(
-        self, symbol: str, period: str, count: int = 20, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, period: str, count: int = 20, extra_data: Any = None, **kwargs: Any,
     ) -> None:
         path, params, extra_data = self._get_kline(symbol, period, count, extra_data, **kwargs)
         self.submit(
@@ -118,16 +119,16 @@ class WazirxRequestDataSpot(WazirxRequestData):
         )
 
     def _get_exchange_info(
-        self, extra_data: Any = None, **kwargs: Any
+        self, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, Any], Any]:
         path = "/api/v2/markets"
         return self._request_prepare(
-            path, extra_data=extra_data, request_type="get_exchange_info", symbol=""
+            path, extra_data=extra_data, request_type="get_exchange_info", symbol="",
         )
 
     @staticmethod
     def _get_exchange_info_normalize_function(
-        input_data: Any, extra_data: Any
+        input_data: Any, extra_data: Any,
     ) -> tuple[list[Any], bool]:
         if not input_data or WazirxRequestData._is_error(input_data):
             return [], False
@@ -139,7 +140,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         return self.http_request(path, params=params, extra_data=extra_data)
 
     def _get_balance(
-        self, symbol: str | None = None, extra_data: Any = None, **kwargs: Any
+        self, symbol: str | None = None, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, Any], Any]:
         path = "/api/v2/account/balance"
         timestamp = str(int(time.time() * 1000))
@@ -165,7 +166,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         return self.http_request(path, params=params, extra_data=extra_data)
 
     def _get_account(
-        self, extra_data: Any = None, **kwargs: Any
+        self, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, Any], Any]:
         return self._get_balance(extra_data=extra_data, **kwargs)
 
@@ -204,7 +205,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         query = urllib.parse.urlencode(sorted(params.items()))
         params["signature"] = self._get_signature(query)
         return self._request_prepare(
-            path, params=params, extra_data=extra_data, request_type="make_order", symbol=symbol
+            path, params=params, extra_data=extra_data, request_type="make_order", symbol=symbol,
         )
 
     @staticmethod
@@ -224,12 +225,12 @@ class WazirxRequestDataSpot(WazirxRequestData):
         **kwargs: Any,
     ) -> Any:
         path, params, extra_data = self._make_order(
-            symbol, volume, price, order_type, offset, extra_data, **kwargs
+            symbol, volume, price, order_type, offset, extra_data, **kwargs,
         )
         return self.http_request(path, params=params, extra_data=extra_data)
 
     def _cancel_order(
-        self, symbol: str, order_id: str, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, order_id: str, extra_data: Any = None, **kwargs: Any,
     ) -> tuple[str, dict[str, str], Any]:
         path = "/api/v2/orders"
         timestamp = str(int(time.time() * 1000))
@@ -248,7 +249,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
         )
 
     def cancel_order(
-        self, symbol: str, order_id: str, extra_data: Any = None, **kwargs: Any
+        self, symbol: str, order_id: str, extra_data: Any = None, **kwargs: Any,
     ) -> Any:
         path, params, extra_data = self._cancel_order(symbol, order_id, extra_data, **kwargs)
         return self.http_request(path, params=params, extra_data=extra_data)
@@ -266,13 +267,7 @@ class WazirxRequestDataSpot(WazirxRequestData):
 
         extra_data = update_extra_data(
             extra_data,
-            **{
-                "request_type": request_type,
-                "symbol_name": symbol,
-                "asset_type": self.asset_type,
-                "exchange_name": self.exchange_name,
-                "normalize_function": getattr(self, f"_{request_type}_normalize_function"),
-            },
+            request_type=request_type, symbol_name=symbol, asset_type=self.asset_type, exchange_name=self.exchange_name, normalize_function=getattr(self, f"_{request_type}_normalize_function"),
         )
         return path, params or {}, extra_data
 
@@ -289,12 +284,6 @@ class WazirxRequestDataSpot(WazirxRequestData):
 
         extra_data = update_extra_data(
             extra_data,
-            **{
-                "request_type": request_type,
-                "symbol_name": symbol,
-                "asset_type": self.asset_type,
-                "exchange_name": self.exchange_name,
-                "normalize_function": getattr(self, f"_{request_type}_normalize_function"),
-            },
+            request_type=request_type, symbol_name=symbol, asset_type=self.asset_type, exchange_name=self.exchange_name, normalize_function=getattr(self, f"_{request_type}_normalize_function"),
         )
         return path, params or {}, extra_data

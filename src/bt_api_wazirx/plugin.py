@@ -3,11 +3,12 @@ from bt_api_base.registry import ExchangeRegistry
 
 
 def register_wazirx() -> None:
-    from bt_api_wazirx.feeds.live_wazirx.spot import WazirxRequestDataSpot
-    from bt_api_wazirx.exchange_data import WazirxExchangeDataSpot
-    from bt_api_wazirx.errors import WazirxErrorTranslator
-    from bt_api_wazirx.tickers import WazirxRequestTickerData
     from bt_api_base.balance_utils import simple_balance_handler
+
+    from bt_api_wazirx.errors import WazirxErrorTranslator
+    from bt_api_wazirx.exchange_data import WazirxExchangeDataSpot
+    from bt_api_wazirx.feeds.live_wazirx.spot import WazirxRequestDataSpot
+    from bt_api_wazirx.tickers import WazirxRequestTickerData
 
     ExchangeRegistry.register(
         "WAZIRX___SPOT",
