@@ -6,7 +6,9 @@ class WazirxErrorTranslator(ErrorTranslator):
         "invalid_api_key": UnifiedErrorCode(1001, "invalid_api_key", "Invalid API key"),
         "invalid_signature": UnifiedErrorCode(1002, "invalid_signature", "Invalid signature"),
         "insufficient_balance": UnifiedErrorCode(
-            1003, "insufficient_balance", "Insufficient balance",
+            1003,
+            "insufficient_balance",
+            "Insufficient balance",
         ),
         "invalid_order": UnifiedErrorCode(1004, "invalid_order", "Invalid order"),
         "order_not_found": UnifiedErrorCode(1005, "order_not_found", "Order not found"),

@@ -24,7 +24,9 @@ class WazirxRequestData:
 
     def _get_signature(self, query_string: str) -> str:
         return hmac.new(
-            self.secret.encode("utf-8"), query_string.encode("utf-8"), hashlib.sha256,
+            self.secret.encode("utf-8"),
+            query_string.encode("utf-8"),
+            hashlib.sha256,
         ).hexdigest()
 
     def _get_headers(self) -> dict:
